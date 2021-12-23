@@ -1,9 +1,11 @@
 # CodeManagement
 ## **Private Code Management**
  ## Sql Server Codes List
-### get table list in database
+ 
+### **delete all tables in database**
+> [get tables](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_all_tables_in_database.sql) <br/> `delete all tables in database in sql server`
+---
 
-`SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'`
-
-### delete all tables in database
-
+### **delete all tables in database**
+> [delete tables](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/delete_tables_in_database.sql) <br/> `delete all tables in database in sql server`
+---
