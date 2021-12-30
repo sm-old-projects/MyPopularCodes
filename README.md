@@ -11,5 +11,5 @@
 ---
 
 ### **get system informations**
-> [get system informations](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/delete_tables_in_database.sql) <br/> `get all system informations like  [server info , server name , current database , databases list]`
+> [get system informations](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_system_informations.sql) <br/> `get all system informations like  [server info , server name , current database , databases list]`
 ---
