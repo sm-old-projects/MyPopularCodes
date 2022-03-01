@@ -2,8 +2,8 @@
 ## **Private Code Management**
  ## Sql Server Codes List
  
-### **delete all tables in database**
-> [get tables](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_all_tables_in_database.sql) <br/> `delete all tables in database in sql server`
+### **get all tables in database**
+> [get tables](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_all_tables_in_database.sql) <br/> `get all tables in database in sql server`
 ---
 
 ### **delete all tables in database**
