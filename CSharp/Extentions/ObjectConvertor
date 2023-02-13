@@ -1,0 +1,41 @@
+using Newtonsoft.Json;
+
+namespace Common.Utilities
+{
+    public static class ObjectConvertor
+	{
+		/// <summary>
+		/// object to json string
+		/// </summary>
+		/// <param name="obj">object model</param>
+		/// <returns>json string</returns>
+		public static string ToJson(this object obj)
+		{
+			if (obj == null)
+			{
+				return null;
+			}
+			return JsonConvert.SerializeObject(obj);
+		}
+		/// <summary>
+		/// string json to object model
+		/// </summary>
+		/// <typeparam name="T">object model</typeparam>
+		/// <param name="json">json string</param>
+		/// <returns>deserialized model</returns>
+		public static T ToObject<T>(this string json)
+		{
+            try
+            {
+				if (string.IsNullOrEmpty(json))
+					return default(T);
+				return JsonConvert.DeserializeObject<T>(json);
+			}
+            catch (System.Exception)
+            {
+				return default(T);
+            }
+			
+		}
+	}
+}
