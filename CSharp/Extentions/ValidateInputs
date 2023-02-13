@@ -14,12 +14,10 @@ namespace Common.Utilities
         {
             try
             {
-                Match match = Regex.Match(str, regex, RegexOptions.IgnoreCase);
-                if (str != string.Empty && match.Success)
-                {
-                    return true;
-                }
-                return false;
+                if (string.IsNullOrEmpty(str))
+                    return false;
+                Match match = Regex.Match(str, regex, RegexOptions.IgnoreCase,TimeSpan.FromSeconds(1));
+                return match.Success;
             }
             catch (Exception)
             {
