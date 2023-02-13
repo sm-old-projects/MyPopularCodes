@@ -1,0 +1,36 @@
+using Common.Exceptions;
+
+namespace Packages.BasePackages
+{ 
+    public class MList<T>
+    {
+        public List<T> Model { get; set; }
+        public int Count { get; set; }
+    }
+    public static class MlistExtentions
+    {
+        public static MList<T> GetPagedData<T>(this IQueryable<T> query, int pageIndex, int pageSize) where T : BaseEntity
+        {
+            try
+            {
+                var page = query
+                    .Select(p => new
+                    {
+                        ModelData = p,
+                        TotalCount = query.Count()
+                    })
+                   .Skip(pageIndex * pageSize).Take(pageSize)
+                   .ToArray().ToList();
+                return new MList<T>()
+                {
+                    Model = page.Select(x => x.ModelData).ToList(),
+                    Count = page.First().TotalCount
+                };
+            }
+            catch (Exception Ex)
+            {
+                throw new BadRequestException(new MessageHelper(Ex.Message, Ex.Message).GetException);
+            }
+        }
+    }
+}
