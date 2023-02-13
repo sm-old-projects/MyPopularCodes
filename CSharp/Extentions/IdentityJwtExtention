@@ -1,0 +1,36 @@
+using System.Security.Claims;
+
+namespace Common.Utilities
+{
+    public static class IdentityJwtExtention
+    {
+        public static string GetUser_Token(this ClaimsIdentity modelIn)
+        {
+            try
+            {
+                var model = modelIn?.FindFirst("UToken").Value;
+                if (model == null)
+                    return "";
+                return model;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        public static Guid? GetUser_Id(this ClaimsIdentity modelIn)
+        {
+            try
+            {
+                var model = modelIn?.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                if (model == null)
+                    return null;
+                return Guid.Parse(model);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+    }
+}
