@@ -29,21 +29,13 @@ namespace Common.Utilities
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool IsValidMobileNumber(this string str)
-        {
-            var regex = @"^(\+98|0098|98|0)?9\d{9}$";
-            return str.ValidateRegix(regex);
-        }
+        public static bool IsValidMobileNumber(this string str) => str.ValidateRegix(@"^(\+98|0098|98|0)?9\d{9}$");
         /// <summary>
         /// بررسی صحیح بودن فرمت ایمیل
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool ValidateEmail(this string str)
-        {
-            var regex = @"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,3})$";
-            return str.ValidateRegix(regex);
-        }
+        public static bool ValidateEmail(this string str) => str.ValidateRegix(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,3})$");
         /// <summary>
         /// نرمال سازی شماره موبایل
         /// </summary>
