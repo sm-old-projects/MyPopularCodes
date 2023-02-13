@@ -1,0 +1,200 @@
+namespace Common.Utilities
+{
+    public static class EnumExcentions
+    {
+        public static IEnumerable<T> GetEnumValues<T>(this T input) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+                throw new NotSupportedException();
+
+            return Enum.GetValues(input.GetType()).Cast<T>();
+        }
+
+        public static IEnumerable<T> GetEnumFlags<T>(this T input) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+                throw new NotSupportedException();
+
+            foreach (var value in Enum.GetValues(input.GetType()))
+                if ((input as Enum).HasFlag(value as Enum))
+                    yield return (T)value;
+        }
+        //-------------------------------------------Display Attributes------------------------------
+        public static string ToDisplayName(this Enum value, DisplayProperty property = DisplayProperty.Name)
+        {
+            Assert.NotNull(value, nameof(value)); try
+            {
+
+                var attribute = value.GetType().GetField(value.ToString())
+                    .GetCustomAttributes(false).FirstOrDefault();
+                if (attribute == null)
+                    return value.ToString();
+                var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+                if (propValue == null)
+                    return "";
+                return propValue.ToString().CleanString();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        public static string ToDisplayShortName(this Enum value, DisplayProperty property = DisplayProperty.ShortName)
+        {
+            try
+            {
+                Assert.NotNull(value, nameof(value));
+                var attribute = value.GetType().GetField(value.ToString())
+                    .GetCustomAttributes(false).FirstOrDefault();
+                if (attribute == null)
+                    return value.ToString();
+                var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+                if (propValue == null)
+                    return "";
+                return propValue.ToString().CleanString();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        public static string ToDisplayGroupName(this Enum value, DisplayProperty property = DisplayProperty.GroupName)
+        {
+            try
+            {
+                Assert.NotNull(value, nameof(value));
+                var attribute = value.GetType().GetField(value.ToString())
+                    .GetCustomAttributes(false).FirstOrDefault();
+                if (attribute == null)
+                    return value.ToString();
+                var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+                if (propValue == null)
+                    return "";
+                return propValue.ToString().CleanString();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        public static string ToDisplayDescription(this Enum value, DisplayProperty property = DisplayProperty.Description)
+        {
+            try
+            {
+                Assert.NotNull(value, nameof(value));
+                var attribute = value.GetType().GetField(value.ToString())
+                    .GetCustomAttributes(false).FirstOrDefault();
+                if (attribute == null)
+                    return value.ToString();
+                var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+                if (propValue == null)
+                    return "";
+                return propValue.ToString().CleanString();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        public static int ToDisplayOrder(this Enum value, DisplayProperty property = DisplayProperty.Order)
+        {
+            try
+            {
+                Assert.NotNull(value, nameof(value));
+                var attribute = value.GetType().GetField(value.ToString())
+                        .GetCustomAttributes(false).FirstOrDefault();
+                if (attribute == null)
+                    return 0;
+                var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+                if (propValue == null)
+                    return 0;
+                return int.Parse(propValue.ToString().CleanString());
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+        public static string ToDisplayPrompt(this Enum value, DisplayProperty property = DisplayProperty.Prompt)
+        {
+            try
+            {
+                Assert.NotNull(value, nameof(value));
+                var attribute = value.GetType().GetField(value.ToString())
+                    .GetCustomAttributes(false).FirstOrDefault();
+                if (attribute == null)
+                    return value.ToString();
+                var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+                if (propValue == null)
+                    return "";
+                return propValue.ToString().CleanString();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        //-------------------------------------------Display Attributes------------------------------
+
+        public static string ToDisplay(this Enum value, DisplayProperty property = DisplayProperty.Name)
+        {
+            Assert.NotNull(value, nameof(value));
+
+            var attribute = value.GetType().GetField(value.ToString())
+                .GetCustomAttributes(false).FirstOrDefault();
+
+            if (attribute == null)
+                return value.ToString();
+
+            var propValue = attribute.GetType().GetProperty(property.ToString()).GetValue(attribute, null);
+            return propValue.ToString();
+        }
+
+        public static Dictionary<int, string> ToDictionary(this Enum value)
+        {
+            return Enum.GetValues(value.GetType()).Cast<Enum>().ToDictionary(p => Convert.ToInt32(p), q => ToDisplay(q));
+        }
+        public static List<EnumProperties> ToData(this Enum value)
+        {
+            var models = Enum.GetValues(value.GetType()).Cast<Enum>();
+            List<EnumProperties> model = new List<EnumProperties>();
+            foreach (var item in models)
+            {
+                var u = Enum.GetValues(item.GetType());
+                var _model = new EnumProperties()
+                {
+                    Description = item.ToDisplayDescription(),
+                    GroupName = item.ToDisplayGroupName(),
+                    Name = item.ToDisplayName(),
+                    Order = item.ToDisplayOrder(),
+                    Promot = item.ToDisplayPrompt(),
+                    ShortName = item.ToDisplayShortName()
+                };
+                _model.Id = int.Parse(item.ToJson());
+                model.Add(_model);
+            }
+            return model;
+        }
+    }
+    public enum DisplayProperty
+    {
+        Description,
+        GroupName,
+        Name,
+        Prompt,
+        ShortName,
+        Order,
+        FaName
+    }
+    public class EnumProperties
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ShortName { get; set; }
+        public int Order { get; set; }
+        public string GroupName { get; set; }
+        public string Promot { get; set; }
+    }
+}
