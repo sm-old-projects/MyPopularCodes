@@ -1,0 +1,70 @@
+namespace Common.Utilities
+{
+    public static class DistanceLocationCalculator
+    {
+        public static double getDistance(this Location from, Location to)
+        {
+            double _lat1 = from.Latitude, _lon1 = from.Longitude, _lat2 = to.Latitude, _lon2 = to.Longitude;
+            // The math module contains
+            // a function named toRadians
+            // which converts from degrees
+            // to radians.
+            _lon1 = toRadians(_lon1);
+            _lon2 = toRadians(_lon2);
+            _lat1 = toRadians(_lat1);
+            _lat2 = toRadians(_lat2);
+
+            // Haversine formula
+            double dlon = _lon2 - _lon1;
+            double dlat = _lat2 - _lat1;
+            double a = Math.Pow(Math.Sin(dlat / 2), 2) +
+                       Math.Cos(_lat1) * Math.Cos(_lat2) *
+                       Math.Pow(Math.Sin(dlon / 2), 2);
+
+            double c = 2 * Math.Asin(Math.Sqrt(a));
+
+            // Radius of earth in kilometers.
+            double r = 6371;
+
+            // calculate the result
+            return (c * r);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from">base location</param>
+        /// <param name="to">near by locations</param>
+        /// <param name="distance">max distance by meter</param>
+        /// <returns></returns>
+        public static List<Location> getNearBy(this Location from, List<Location> to, double distance)
+        {
+            var nearbyLocations = new List<Location>();
+            //meter to kilometer
+            distance /= 1000;
+            foreach (var item in to)
+            {
+                var dist = from.getDistance(item);
+                if (dist <= distance)
+                    nearbyLocations.Add(item);
+            }
+
+            return nearbyLocations;
+        }
+        private static double toRadians(double angleIn10thofaDegree)
+        {
+            // Angle in 10th
+            // of a degree
+            return (angleIn10thofaDegree * Math.PI) / 180;
+        }
+
+
+    }
+    public class Location
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double BaseDistance { get; set; }
+    }
+}
