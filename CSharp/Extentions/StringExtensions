@@ -1,0 +1,454 @@
+using System.Text.RegularExpressions;
+
+namespace Common.Utilities
+{
+    public static class StringExtensions
+    {
+        /// <summary>
+        /// is string has value?
+        /// </summary>
+        /// <param name="value">string value</param>
+        /// <param name="ignoreWhiteSpace">if you want to ignore white space in value</param>
+        /// <returns></returns>
+        public static bool HasValue(this string value, bool ignoreWhiteSpace = true)
+        {
+            return ignoreWhiteSpace ? !string.IsNullOrWhiteSpace(value) : !string.IsNullOrEmpty(value);
+        }
+        /// <summary>
+        /// convert string to int value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static int ToInt(this string value)
+        {
+            return Convert.ToInt32(value);
+        }
+        /// <summary>
+        /// convert string to decimal value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static decimal ToDecimal(this string value)
+        {
+            return Convert.ToDecimal(value);
+        }
+        /// <summary>
+        /// convert string to numeric value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToNumeric(this int value)
+        {
+            return value.ToString("N0"); //"123,456"
+        }
+        /// <summary>
+        ///  convert int to numeric value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToNumeric(this decimal value)
+        {
+            return value.ToString("N0");
+        }
+        /// <summary>
+        ///  convert int to currency value
+        ///  it's ok for Rial currency
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToCurrency(this int value)
+        {
+            //fa-IR => current culture currency symbol => ریال
+            //123456 => "123,123ریال"
+            return value.ToString("C0");
+        }
+        /// <summary>
+        ///  convert decimal to currency value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToCurrency(this decimal value)
+        {
+            return value.ToString("C0");
+        }
+        /// <summary>
+        /// convert english numbers to farsi numbers
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string En2Fa(this string str)
+        {
+            return str.Replace("0", "۰")
+                .Replace("1", "۱")
+                .Replace("2", "۲")
+                .Replace("3", "۳")
+                .Replace("4", "۴")
+                .Replace("5", "۵")
+                .Replace("6", "۶")
+                .Replace("7", "۷")
+                .Replace("8", "۸")
+                .Replace("9", "۹");
+        }
+        /// <summary>
+        /// convert farsi numbers to english numbers
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Fa2En(this string str)
+        {
+            return str.Replace("۰", "0")
+                .Replace("۱", "1")
+                .Replace("۲", "2")
+                .Replace("۳", "3")
+                .Replace("۴", "4")
+                .Replace("۵", "5")
+                .Replace("۶", "6")
+                .Replace("۷", "7")
+                .Replace("۸", "8")
+                .Replace("۹", "9")
+                //iphone numeric
+                .Replace("٠", "0")
+                .Replace("١", "1")
+                .Replace("٢", "2")
+                .Replace("٣", "3")
+                .Replace("٤", "4")
+                .Replace("٥", "5")
+                .Replace("٦", "6")
+                .Replace("٧", "7")
+                .Replace("٨", "8")
+                .Replace("٩", "9");
+        }
+        /// <summary>
+        /// fix and normalize some arabic characters  to farsi like :'ﮏ,ﮐ,ﮑ,ك,ي ...'
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string FixPersianChars(this string str)
+        {
+            return str.Replace("ﮎ", "ک")
+                .Replace("ﮏ", "ک")
+                .Replace("ﮐ", "ک")
+                .Replace("ﮑ", "ک")
+                .Replace("ك", "ک")
+                .Replace("ي", "ی")
+                .Replace(" ", " ")
+                .Replace("‌", " ")
+                .Replace("ھ", "ه");//.Replace("ئ", "ی");
+        }
+        /// <summary>
+        /// return with filters => EmptyIfNull,Trim,FixPersianChars,Fa2En
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string CleanString(this string str)
+        {
+            return str.EmptyIfNull().Trim().FixPersianChars().Fa2En();
+        }
+        /// <summary>
+        /// if string length = 0 return null value
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string NullIfEmpty(this string str)
+        {
+            return str?.Length == 0 ? null : str;
+        }
+        /// <summary>
+        /// if string value = null return emty string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string EmptyIfNull(this string str)
+        {
+            return str == null ? "" : str;
+        }
+        /// <summary>
+        /// get randome code in numbers and letters
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="Lentgh"></param>
+        /// <param name="justNumber"></param>
+        /// <returns></returns>
+        public static string GetNewRandomCode(this string str, int Lentgh = 8, bool justNumber = false)
+        {
+            string NumberText = "1234567890";
+            string ComplexText = "1234567890abcdefghijklmnopqrstuvwxyz";
+            Random random = new Random();
+            string Code = "";
+            for (int i = 0; i < Lentgh; i++)
+            {
+                if (justNumber)
+                    Code += NumberText[random.Next(0, 9)];
+                else
+                    Code += ComplexText[random.Next(0, 35)];
+            }
+            return Code;
+        }
+        /// <summary>
+        /// return new guid as random code 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string GetNewCodeByGuid(this string input)
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
+        }
+        /// <summary>
+        /// return randome code by date + guid code
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string GetNewCodeByDateTime(this string input)
+        {
+            return
+                DateTime.Now.Year.ToString() +
+                DateTime.Now.Month.ToString() +
+                DateTime.Now.Day.ToString() +
+                string.Empty.GetNewCodeByGuid();
+        }
+        /// <summary>
+        /// return new random code by 1st prat of guid
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string GetNewShortRandomCode(this string input)
+        {
+            return Guid.NewGuid().ToString().Split('-')[0];
+        }
+        /// <summary>
+        /// return splited characters safly as list of string characters
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="Seperator"></param>
+        /// <returns></returns>
+        public static List<string> ToSafeSplit(this string input, char Seperator)
+        {
+            if (input == null || input == "")
+                return new List<string>();
+            try
+            {
+                var model = new List<string>();
+                var names = input.Split(Seperator);
+                foreach (var item in names)
+                {
+                    if (item != "" & item != null)
+                        model.Add(item);
+                }
+                return model;
+            }
+            catch (Exception)
+            {
+                return new List<string>();
+            }
+        }
+        /// <summary>
+        /// return trim of text 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string ToSafeTrim(this string input)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(input))
+                    return "";
+                return input.Trim();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        /// <summary>
+        /// get list of used words in a sentence
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static List<string> GetWords(this string model)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model))
+                {
+                    return new List<string>();
+                }
+                var words = model.Split(
+                      new[] { ' ', ',', ';', '.', '!', '"', '(', ')', '?', ':', '\'', '«', '»', '+', '-' },
+                      StringSplitOptions.RemoveEmptyEntries);
+                return words.ToList();
+            }
+            catch (Exception Ex)
+            {
+                return new List<string>();
+            }
+        }
+        /// <summary>
+        /// get time to read a sentence as minute 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="wordsPerMinute"></param>
+        /// <returns></returns>
+        public static int GetTimeToRead(this string model, int wordsPerMinute = 180)
+        {
+            return model.GetWords().Count / wordsPerMinute;
+        }
+        /// <summary>
+        /// get words in html content
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static List<string> GetHtmlWords(this string model)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model))
+                {
+                    return new List<string>();
+                }
+                model = model.CleanTags().Trim();
+                model = model.Replace("\t", " ");
+                model = model.Replace("\n", " ");
+                model = model.Replace("\r", " ");
+
+                var words = model.Split(
+                    new[] { ' ', ',', ';', '.', '!', '"', '(', ')', '?', ':', '\'', '«', '»', '+', '-' },
+                    StringSplitOptions.RemoveEmptyEntries);
+                return words.ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<string>();
+            }
+        }
+        /// <summary>
+        /// remove html tags in content
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static string RemoveHtml(this string model)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(model))
+                {
+                    return string.Empty;
+                }
+                model = model.CleanTags().Trim();
+                model = model.Replace("\t", " ");
+                model = model.Replace("\n", " ");
+                model = model.Replace("\r", " ");
+                return model;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+        /// <summary>
+        /// get normal time to read html content 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="wordsPerMinute"></param>
+        /// <returns></returns>
+        public static int GetTimeToReadHtml(this string model, int wordsPerMinute = 180)
+        {
+            return model.GetHtmlWords().Count / wordsPerMinute;
+        }
+        /// <summary>
+        /// get normal time to read content 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="wordsPerMinute"></param>
+        /// <returns></returns>
+        public static int GetTimeToRead(this List<string> model, int wordsPerMinute = 180)
+        {
+            return model.Count / wordsPerMinute;
+        }
+        /// <summary>
+        /// to presian string like '1 روز و 1 ساعت و 1 دقیقه و 1 ثانیه'
+        /// </summary>
+        /// <param name="span"></param>
+        /// <returns></returns>
+        public static string ToReadableString(this TimeSpan span)
+        {
+            var formatted = string.Format("{0}{1}{2}{3}",
+                span.Duration().Days > 0 ? string.Format("{0:0} روز و ", span.Days) : string.Empty,
+                span.Duration().Hours > 0 ? string.Format("{0:0} ساعت و ", span.Hours) : string.Empty,
+                span.Duration().Minutes > 0 ? string.Format("{0:0} دقیقه و ", span.Minutes) : string.Empty,
+                span.Duration().Seconds > 0 ? string.Format("{0:0} ثانیه", span.Seconds) : string.Empty);
+
+            if (formatted.EndsWith("و "))
+            {
+                formatted = formatted.Substring(0, formatted.Length - 2);
+            }
+
+            if (string.IsNullOrEmpty(formatted))
+            {
+                formatted = "0 ثانیه";
+            }
+            return formatted.Trim();
+        }
+        public static string ToReadableString(this string model)
+        {
+            try
+            {
+                var timein = model.GetTimeToReadHtml();
+                var time = TimeSpan.FromMinutes(timein);
+                return time.ToReadableString();
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+        private static readonly Regex _matchAllTags = new Regex(@"<(.|\n)*?>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static string CleanTags(this string data)
+        {
+            return data.Replace("\n", "\n ").RemoveHtmlTags();
+        }
+        private static string RemoveHtmlTags(this string text)
+        {
+            return string.IsNullOrEmpty(text) ?
+                        string.Empty :
+                        _matchAllTags.Replace(text, " ").Replace("&nbsp;", " ");
+        }
+        //------------------------------Chroneed--------------------------
+        public static string FirstCharToUpper(this string input) =>
+            input switch
+            {
+                null => throw new ArgumentNullException(nameof(input)),
+                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+                _ => string.Concat(input[0].ToString().ToUpper(), input.AsSpan(1))
+            };
+
+        public static bool ContainsTwoWay(this string input, string word)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(word))
+                    return false;
+                if (input.Contains(word) || word.Contains(input))
+                    return true;
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public static bool IsEnglishText(this string input)
+        {
+            return Regex.IsMatch(input, @"^[\u0000-\u007F]+$");
+        }
+        public static int GetMessageCount(this string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return 0;
+            if (input.IsEnglishText())
+            {
+                return input.Length <= 160 ? 1 : Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 153));
+            }
+            return input.Length <= 70 ? 1 : Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / 67));
+        }
+    }
+}
