@@ -1,0 +1,261 @@
+namespace Packages.BasePackages
+{
+    public class MessageHelper
+    {
+        public MessageHelper(string PerRecordName, string EngRecordName,string ArRecordName="")
+        {
+            switch (MessageLanguage)
+            {
+                case LanguageRecord.Per:
+                    _RecordName = $"'{PerRecordName}'";
+                    break;
+                case LanguageRecord.Eng:
+                    _RecordName = $"'{EngRecordName}'";
+                    break;
+                default:
+                    _RecordName = "";
+                    break;
+            }
+        }
+        private static string _RecordName { get; set; }
+        private static LanguageRecord MessageLanguage
+        {
+            get
+            {
+                return LanguageRecord.Per;
+            }
+        }
+
+
+        public string FieldIsRequired
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "Record is required!" : $"{_RecordName} record is required!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "رکورد الزامی می باشد!" : $"رکورد {_RecordName} الزامی می باشد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordNotFound
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "Record not found!" : $"{_RecordName} not found!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "رکورد یافت نشد!" : $"{_RecordName} یافت نشد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string ModelIsNotValid
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "Model Is Not Valid!" : $"{_RecordName} Is Not Valid!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "مدل ورودی صحیح نمی باشد!" : $"{_RecordName} صحیح نمی باشد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordFound
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "Record  found!" : $"{_RecordName} found!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "رکورد یافت شد!" : $"{_RecordName} یافت شد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordAddedSuccess
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "The record was successfully registered." : $"The {_RecordName} was successfully registered.";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "ثبت رکورد با موفقیت انجام شد." : $"ثبت {_RecordName} با موفقیت انجام شد..";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordAddedFailed
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "There was a problem registering the record!" : $"There was a problem registering the {_RecordName}!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "ثبت رکورد با مشکل روبرو شد!" : $"ثبت {_RecordName} با مشکل روبرو شد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordDeletedSuccess
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "The record was deleted successfully." : $"The {_RecordName} was deleted successfully.";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "حذف رکورد با موفقیت انجام شد." : $"حذف {_RecordName} با موفقیت انجام شد.";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordDeletedFailed
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "There was a problem deleting the record!" : $"There was a problem deleting the {_RecordName}!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "حذف رکورد با مشکل روبرو شد!" : $"حذف {_RecordName} با مشکل روبرو شد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordUpdatedSuccess
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "The record was updated successfully." : $"The {_RecordName}record was updated successfully.";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "ویرایش رکورد با موفقیت انجام شد." : $"ویرایش {_RecordName} با موفقیت انجام شد.";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordUpdateFailed
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "There was a problem updating the record!" : $"There was a problem updating the {_RecordName}!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "ویرایش رکورد با مشکل روبرو شد!" : $"ویرایش {_RecordName} با مشکل روبرو شد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RequestGetError
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "The request encountered an error!" : $"The request {_RecordName} an error!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "درخواست با خطا مواجه شد!" : $"درخواست {_RecordName} با خطا مواجه شد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RequestSuccessfully
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "The request was successfully completed." : $"The {_RecordName} was successfully completed.";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "درخواست با موفقیت انجام شد." : $"{_RecordName} با موفقیت انجام شد.";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string RecordIsExist
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "The record exists in the system!" : $"The {_RecordName} exists in the system!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "رکورد در سیستم وجود دارد!" : $"{_RecordName} در سیستم وجود دارد!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string AccessDenied
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return string.IsNullOrEmpty(_RecordName) ? "access denied!" : $"access denied to {_RecordName}!";
+                    case LanguageRecord.Per:
+                        return string.IsNullOrEmpty(_RecordName) ? "شما دسترسی ندارید!" : $"شما به {_RecordName} دسترسی ندارید!";
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+        public string GetException
+        {
+            get
+            {
+                switch (MessageLanguage)
+                {
+                    case LanguageRecord.Eng:
+                        return _RecordName;
+                    case LanguageRecord.Per:
+                        return _RecordName;
+                    default:
+                        return "___Error:Message Not Found___";
+                }
+            }
+        }
+    }
+    public enum LanguageRecord
+    {
+        Per,
+        Eng
+    }
+}
