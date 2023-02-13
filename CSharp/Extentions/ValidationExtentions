@@ -1,0 +1,90 @@
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
+namespace Common.Utilities
+{
+    public static class ValidationExtentions
+    {
+        /// <summary>
+        /// validate class model
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static bool IsValidModel<T>(this T model) where T : class
+        {
+            PropertyInfo[] infos = typeof(T).GetProperties();
+            foreach (PropertyInfo info in infos)
+            {
+                var value = info.GetValue(model, null);
+                object[] attrs = info.GetCustomAttributes(true);
+                foreach (object attr in attrs)
+                {
+                    ValidationAttribute authAttr = attr as ValidationAttribute;
+                    if (authAttr != null)
+                    {
+                        var validResult = authAttr.IsValid(value);
+                        if (!validResult)
+                            return false;
+                    }
+                }
+            }
+            return true;
+        }
+        /// <summary>
+        /// get validate result
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static List<ValidationResult> GetValidationResult<T>(this T model) where T : class
+        {
+            List<ValidationResult> Errors = new List<ValidationResult>();
+            PropertyInfo[] infos = typeof(T).GetProperties();
+            foreach (PropertyInfo info in infos)
+            {
+                var value = info.GetValue(model, null);
+                object[] attrs = info.GetCustomAttributes(true);
+                foreach (object attr in attrs)
+                {
+                    ValidationAttribute authAttr = attr as ValidationAttribute;
+                    if (authAttr != null)
+                    {
+                        var validResult = authAttr.IsValid(value);
+                        if (!validResult)
+                        {
+                            Errors.Add(new ValidationResult()
+                            {
+                                Name = info.Name,
+                                ErrorMessage = authAttr.ErrorMessage
+                            });
+                        }
+                    }
+
+                }
+            }
+            return Errors;
+        }
+        public static bool IsNull<T>(this T model) where T : class
+        {
+            if (model == null)
+                return true;
+            return false;
+        }
+        public static bool IsEquals(this string model, string text)
+        {
+            if (model == null & text == null)
+                return true;
+            if (model == null)
+                return false;
+            if (text == null)
+                return false;
+            return model.ToLower().Equals(text.ToLower());
+        }
+    }
+    public class ValidationResult
+    {
+        public string Name { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+}
