@@ -15,5 +15,5 @@
 ---
 
 ### **get tables in a database with record count**
-> [get system informations](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_tables_name_with_record_count.sql) <br/> `get tables in a database with record count`
+> [get tables in a database with record count](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_tables_name_with_record_count.sql) <br/> `get tables in a database with record count`
 ---
