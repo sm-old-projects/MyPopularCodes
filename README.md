@@ -14,6 +14,6 @@
 > [get system informations](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_system_informations.sql) <br/> `get all system informations like  [server info , server name , current database , databases list]`
 ---
 
-### **get system informations**
+### **get tables in a database with record count**
 > [get system informations](https://github.com/moradisaed5/CodeManagement/blob/main/Sql/get_tables_name_with_record_count.sql) <br/> `get tables in a database with record count`
 ---
